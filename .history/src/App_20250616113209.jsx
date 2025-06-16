@@ -34,7 +34,6 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/cart" element={<CartPage />} />
       </Routes>
-      <Footer />
     </>
   );
 }
