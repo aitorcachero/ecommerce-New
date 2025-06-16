@@ -6,7 +6,7 @@ const getAllProducts = async (retries = 3, delay = 1000) => {
   if (USE_MOCK) {
     try {
       // Simular delay de red
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      await new Promise(resolve => setTimeout(resolve, 300));
       return mockData.products;
     } catch (error) {
       console.error('Error al obtener productos del mock:', error);
@@ -20,7 +20,7 @@ const getAllProducts = async (retries = 3, delay = 1000) => {
 
     if (data.status === 429 && retries > 0) {
       console.log(`Rate limit alcanzado. Reintentando en ${delay}ms...`);
-      await new Promise((resolve) => setTimeout(resolve, delay));
+      await new Promise(resolve => setTimeout(resolve, delay));
       return getAllProducts(retries - 1, delay * 2);
     }
 
@@ -34,6 +34,6 @@ const getAllProducts = async (retries = 3, delay = 1000) => {
     console.error('Error al obtener productos:', error);
     throw error;
   }
-};
+}
 
 export { getAllProducts };
