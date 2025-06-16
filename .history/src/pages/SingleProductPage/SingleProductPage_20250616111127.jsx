@@ -54,14 +54,11 @@ export default function SingleProductPage() {
     updateMetaTag('og:image', product.thumbnail || product.images?.[0]);
     updateMetaTag('og:url', window.location.href);
     updateMetaTag('og:type', 'product');
-
+    
     // Meta tags adicionales para productos
     updateMetaTag('product:price:amount', product.price.toString());
     updateMetaTag('product:price:currency', 'USD');
-    updateMetaTag(
-      'product:availability',
-      product.stock > 0 ? 'in stock' : 'out of stock'
-    );
+    updateMetaTag('product:availability', product.stock > 0 ? 'in stock' : 'out of stock');
     updateMetaTag('product:brand', product.brand || 'TecnoStyle');
     updateMetaTag('product:category', product.category);
 
@@ -85,7 +82,7 @@ export default function SingleProductPage() {
   // Función para restaurar meta tags originales
   const restoreOriginalMetaTags = () => {
     document.title = 'TecnoStyle - Ecommerce';
-
+    
     const updateMetaTag = (property, content) => {
       const metaTag = document.querySelector(`meta[property="${property}"]`);
       if (metaTag) {
