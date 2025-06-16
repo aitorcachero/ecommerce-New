@@ -134,62 +134,6 @@ export default function ProductsPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // HANDLERS - Funciones que faltaban
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-  };
-
-  const handleOrderChange = (orderType) => {
-    setSelectedOrder(orderType);
-  };
-
-  // Handler para el slider de precio mínimo
-  const handleMinPriceChange = (e) => {
-    const value = parseInt(e.target.value);
-    setPriceRange((prev) => ({
-      min: value,
-      max: Math.max(value, prev.max),
-    }));
-  };
-
-  // Handler para el slider de precio máximo
-  const handleMaxPriceChange = (e) => {
-    const value = parseInt(e.target.value);
-    setPriceRange((prev) => ({
-      min: Math.min(prev.min, value),
-      max: value,
-    }));
-  };
-
-  // Handler para los inputs de precio
-  const handleMinInputChange = (e) => {
-    const value = parseInt(e.target.value) || 0;
-    if (value >= 0 && value <= 2000) {
-      setPriceRange((prev) => ({
-        min: value,
-        max: Math.max(value, prev.max),
-      }));
-    }
-  };
-
-  const handleMaxInputChange = (e) => {
-    const value = parseInt(e.target.value) || 0;
-    if (value >= 0 && value <= 2000) {
-      setPriceRange((prev) => ({
-        min: Math.min(prev.min, value),
-        max: value,
-      }));
-    }
-  };
-
-  // Handler para resetear filtros
-  const handleReset = () => {
-    setSelectedCategory('Todas las categorías');
-    setSelectedOrder('Ordenar por');
-    setPriceRange({ min: 0, max: 2000 });
-    setSearchTerm('');
-  };
-
   // Función para hacer scroll al top
   const scrollToTop = () => {
     window.scrollTo({
@@ -436,7 +380,7 @@ export default function ProductsPage() {
                 </Listbox>
               </div>
 
-              {/* Filtro de rango de precio */}
+              {/* Filtro de rango de precio - NUEVO SLIDER MODERNO */}
               <div className="mb-8">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
                   Rango de Precio
@@ -529,33 +473,47 @@ export default function ProductsPage() {
 
           {/* Grid de productos */}
           <main className="lg:col-span-3">
+            <div className="mb-6 flex items-center justify-between">
+              <p className="text-sm text-gray-700">
+                Mostrando{' '}
+                <span className="font-medium">{filteredProducts.length}</span>{' '}
+                productos
+              </p>
+            </div>
+
             {filteredProducts.length === 0 ? (
               <div className="text-center py-12">
-                <div className="text-gray-400 text-6xl mb-4">🔍</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <div className="mx-auto h-24 w-24 text-gray-400 mb-4">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
+                      d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.291-1.007-5.691-2.709M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
                   No se encontraron productos
                 </h3>
-                <p className="text-gray-600">
-                  Intenta ajustar los filtros o buscar con otros términos
+                <p className="text-gray-500 mb-4">
+                  Intenta ajustar los filtros para encontrar lo que buscas
                 </p>
+                <button
+                  onClick={handleReset}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                >
+                  Limpiar filtros
+                </button>
               </div>
             ) : (
-              <>
-                {/* Contador de resultados */}
-                <div className="mb-6">
-                  <p className="text-sm text-gray-600">
-                    Mostrando {filteredProducts.length} de {products.length}{' '}
-                    productos
-                  </p>
-                </div>
-
-                {/* Grid de productos */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                  ))}
-                </div>
-              </>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                {filteredProducts.map((product) => (
+                  <div key={product.id} className="group">
+                    <ProductCard product={product} />
+                  </div>
+                ))}
+              </div>
             )}
           </main>
         </div>
@@ -565,7 +523,7 @@ export default function ProductsPage() {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-300"
           aria-label="Volver arriba"
         >
           <ChevronUpIcon className="h-6 w-6" />
